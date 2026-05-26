@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:')</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+  <div id="petal-layer" aria-hidden="true"></div>
+
+  <main class="page">
+    <form id="ask-form" class="card" novalidate>
+      <div class="card__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="card__progress-fill" id="progress-fill"></div>
+      </div>
+
+      <div class="card__steps" id="form-steps">
+        <!-- Steps rendered by form.js -->
+      </div>
+
+      <footer class="card__nav">
+        <button type="button" class="btn btn--ghost" id="btn-back" hidden>Back</button>
+        <button type="button" class="btn btn--primary" id="btn-next">Next</button>
+      </footer>
+    </form>
+  </main>
+
+  <script src="js/petals.js" defer></script>
+  <script src="js/form.js" defer></script>
+  </body>
+</html>

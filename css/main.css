@@ -1,0 +1,310 @@
+/* ── Theme ───────────────────────────────────────────── */
+:root {
+  --cream: #fff8f0;
+  --cream-dark: #f5ebe0;
+  --blush: #f4c4c4;
+  --blush-deep: #e8a0a0;
+  --ink: #4a3f35;
+  --ink-soft: #7a6f65;
+  --card-bg: rgba(255, 252, 248, 0.92);
+  --shadow: 0 12px 40px rgba(74, 63, 53, 0.12);
+  --radius: 1.25rem;
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background-color: var(--cream);
+  overflow-x: hidden;
+}
+
+/* ── Falling petals layer ────────────────────────────── */
+#petal-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  top: -2rem;
+  font-size: var(--petal-size, 1.25rem);
+  line-height: 1;
+  opacity: var(--petal-opacity, 0.7);
+  will-change: transform;
+  user-select: none;
+}
+
+/* ── Page layout ─────────────────────────────────────── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* ── Form card ───────────────────────────────────────── */
+.card {
+  width: min(100%, 26rem);
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cream-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card--wide {
+  width: min(100%, 44rem);
+}
+
+.card__progress {
+  height: 4px;
+  background: var(--cream-dark);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.card__progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--blush), var(--blush-deep));
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.card__steps {
+  position: relative;
+  overflow: hidden;
+  transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.step {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0.35s;
+}
+
+.step--active {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.step__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+}
+
+.step__body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.step__body:empty {
+  min-height: 4rem;
+}
+
+.step__body img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+}
+
+/* ── Yes / No (runaway No) ───────────────────────────── */
+.step__choices {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.step__choices-playground {
+  position: relative;
+  width: 100%;
+  min-height: 7rem;
+  margin-top: 0.25rem;
+}
+
+.btn--no {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  z-index: 2;
+}
+
+.btn--yes {
+  min-width: 7rem;
+}
+
+/* ── Food picker ─────────────────────────────────────── */
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.food-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.5rem 0.25rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--cream);
+  border: 2px solid var(--cream-dark);
+  border-radius: 0.85rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.food-option:hover {
+  border-color: var(--blush);
+  background: #fff;
+}
+
+.food-option:active {
+  transform: scale(0.96);
+}
+
+.food-option--selected {
+  border-color: var(--blush-deep);
+  background: #fff5f5;
+  box-shadow: 0 4px 12px rgba(232, 160, 160, 0.25);
+}
+
+.food-option__emoji {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.food-option__label {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 520px) {
+  .card--wide {
+    width: min(100%, 100%);
+  }
+
+  .food-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.food-option--selected .food-option__label {
+  color: var(--ink);
+}
+
+/* ── Navigation ──────────────────────────────────────── */
+.card__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.card__nav:has(#btn-back[hidden]):not([hidden]) {
+  justify-content: flex-end;
+}
+
+.card__nav[hidden] {
+  display: none;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.65rem 1.35rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--blush-deep), var(--blush));
+  box-shadow: 0 4px 14px rgba(232, 160, 160, 0.45);
+}
+
+.btn--primary:hover {
+  box-shadow: 0 6px 18px rgba(232, 160, 160, 0.55);
+}
+
+.btn--ghost {
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--cream-dark);
+}
+
+.btn--ghost:hover {
+  background: var(--cream-dark);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
