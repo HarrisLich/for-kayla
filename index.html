@@ -329,6 +329,57 @@ html,body{
 }
 .stage[data-state="reading"] .letter-sign{ opacity:1; transform: translateY(0); }
 
+/* ---- polaroid scrapbook tucked into the letter ---- */
+.letter-photos{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 10px 8px;
+  margin: 1.4em 0 0.6em;
+  padding: 4px 0 8px;
+}
+.polaroid{
+  flex: 0 1 auto;
+  width: clamp(88px, 28%, 132px);
+  margin: 0;
+  padding: 7px 7px 22px;
+  background: #fffdf8;
+  border: 1px solid rgba(160,120,90,.16);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 10px 18px -10px rgba(90,60,40,.45);
+  transform: rotate(var(--tilt, 0deg)) translateY(8px);
+  opacity: 0;
+  transition:
+    opacity .65s var(--ease-soft),
+    transform .65s var(--ease-soft);
+}
+.polaroid:nth-child(1){ --tilt: -6deg; transition-delay: .75s; }
+.polaroid:nth-child(2){ --tilt: 3.5deg; transition-delay: .9s; z-index: 1; }
+.polaroid:nth-child(3){ --tilt: -2.5deg; transition-delay: 1.05s; }
+.stage[data-state="reading"] .polaroid{
+  opacity: 1;
+  transform: rotate(var(--tilt, 0deg)) translateY(0);
+}
+.polaroid img{
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center;
+  image-orientation: none;
+  background: var(--paper-edge);
+}
+.polaroid figcaption{
+  font-family: var(--font-script);
+  font-size: .78rem;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1;
+}
+
 /* ==========================================================================
    OVERLAY / CLOSE / HINT / SOUND TOGGLE
    ========================================================================== */
@@ -439,7 +490,7 @@ html,body{
 
 @media (prefers-reduced-motion: reduce){
   .envelope, .letter, .wax-seal-half, .letter-title .ch, .letter-body p, .letter-sign,
-  .envelope-flap, .close-btn, .ambient-glow, .overlay{
+  .envelope-flap, .close-btn, .ambient-glow, .overlay, .polaroid{
     transition-duration: .01s !important;
     animation-duration: .01s !important;
   }
@@ -512,6 +563,12 @@ const LETTER = {
     "Enjoy your day and maybe have some shrimp and a borgar because today is your day -3-",
     "and andddd, no scratch and sniff :p andddd give stinky kitty some boops for me and anddd i want to touch and kiss your face"
   ],
+  // polaroids tucked into the letter — edit src / caption / leave caption empty to hide
+  photos: [
+    { src: "imgs/photo-1.jpg", caption: "us" },
+    { src: "imgs/photo-2.jpg", caption: "mmm" },
+    { src: "imgs/photo-3.jpg", caption: "<3" }
+  ],
   signature: "mmmmmwaaaahhh"
 };
 
@@ -543,12 +600,35 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
   });
 })();
 
-// Build paragraphs + signature
+// Build paragraphs + photos + signature
 LETTER.paragraphs.forEach(text => {
   const p = document.createElement('p');
   p.textContent = text;
   bodyEl.appendChild(p);
 });
+
+if (LETTER.photos && LETTER.photos.length){
+  const gallery = document.createElement('div');
+  gallery.className = 'letter-photos';
+  gallery.setAttribute('aria-label', 'Photos');
+  LETTER.photos.forEach(({ src, caption }) => {
+    const fig = document.createElement('figure');
+    fig.className = 'polaroid';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = caption || 'A memory';
+    img.loading = 'lazy';
+    fig.appendChild(img);
+    if (caption){
+      const cap = document.createElement('figcaption');
+      cap.textContent = caption;
+      fig.appendChild(cap);
+    }
+    gallery.appendChild(fig);
+  });
+  bodyEl.appendChild(gallery);
+}
+
 const signEl = document.createElement('p');
 signEl.className = 'letter-sign';
 signEl.innerHTML = LETTER.signature.split('\n').join('<br>');
